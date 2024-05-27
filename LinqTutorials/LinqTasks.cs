@@ -301,8 +301,7 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<Emp> Task12()
         {
-            IEnumerable<Emp> result = null;
-            return result;
+            return Emps.GetEmpsWithSubordinates();
         }
 
         /// <summary>
@@ -314,9 +313,10 @@ namespace LinqTutorials
         /// </summary>
         public static int Task13(int[] arr)
         {
-            int result = 0;
-            //result=
-            return result;
+            return arr.GroupBy(n => n)
+                .Where(g => g.Count() % 2 != 0)
+                .Select(g => g.Key)
+                .First();
         }
 
         /// <summary>
@@ -325,9 +325,12 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<Dept> Task14()
         {
-            IEnumerable<Dept> result = null;
-            //result =
-            return result;
+            var deptEmpCount = Emps.GroupBy(emp => emp.Deptno)
+                .Select(group => new { Deptno = group.Key, Count = group.Count() });
+
+            return Depts.Where(dept => deptEmpCount.Any(dc => dc.Deptno == dept.Deptno && dc.Count == 5) || 
+                                       !deptEmpCount.Any(dc => dc.Deptno == dept.Deptno))
+                .OrderBy(dept => dept.Dname);
         }
 
         /// <summary>
